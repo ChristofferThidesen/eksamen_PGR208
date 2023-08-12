@@ -3,7 +3,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import HomeScreen from './src/screens/HomeScreen';
 import SplashScreen from './src/components/SplashScreen';
-
+import CharacterInfoScreen from './src/screens/CharacterInfoScreen';
 const Stack = createStackNavigator();
 
 const App = () => {
@@ -16,6 +16,10 @@ const App = () => {
           options={{headerShown: false}}
         />
         <Stack.Screen name="HomeScreen" component={HomeScreen} />
+        <Stack.Screen
+          name="CharacterInfoScreen"
+          component={CharacterInfoScreen}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

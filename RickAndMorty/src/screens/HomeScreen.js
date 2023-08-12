@@ -1,10 +1,12 @@
 import React, {useState, useEffect} from 'react';
+
 import {View, StyleSheet} from 'react-native';
 import axios from 'axios';
 import CharacterList from '../components/CharacterList';
 import CharacterSearch from '../components/CharacterSearch';
 
-const HomeScreen = () => {
+const HomeScreen = ({navigation}) => {
+  // Pass navigation as a prop
   const [characters, setCharacters] = useState([]);
   const [filteredCharacters, setFilteredCharacters] = useState([]);
 
@@ -21,7 +23,7 @@ const HomeScreen = () => {
   }, []);
 
   const handleCharacterPress = character => {
-    navigation.navigate('CharacterInfo', {character});
+    navigation.navigate('CharacterInfoScreen', {character});
   };
 
   const handleSearch = searchTerm => {
@@ -37,6 +39,7 @@ const HomeScreen = () => {
       <CharacterList
         characters={filteredCharacters}
         handleCharacterPress={handleCharacterPress}
+        navigation={navigation} // Pass navigation as a prop
       />
     </View>
   );
