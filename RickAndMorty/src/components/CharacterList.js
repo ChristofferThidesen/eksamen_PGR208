@@ -3,9 +3,10 @@ import {
   View,
   Text,
   FlatList,
-  StyleSheet,
   TouchableOpacity,
+  StyleSheet,
   Image,
+  TextInput,
 } from 'react-native';
 import axios from 'axios';
 import {useNavigation} from '@react-navigation/native';
@@ -13,17 +14,32 @@ import {useNavigation} from '@react-navigation/native';
 const CharacterList = ({handleCharacterPress}) => {
   const navigation = useNavigation();
   const [characters, setCharacters] = useState([]);
+  const [filteredCharacters, setFilteredCharacters] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     axios
       .get('https://rickandmortyapi.com/api/character')
       .then(response => {
         setCharacters(response.data.results);
+        setFilteredCharacters(response.data.results);
       })
       .catch(error => {
         console.error('Error fetching characters', error);
       });
   }, []);
+
+  useEffect(() => {
+    // Filter characters based on search term
+    const filtered = characters.filter(character =>
+      character.name.toLowerCase().includes(searchTerm.toLowerCase()),
+    );
+    setFilteredCharacters(filtered);
+  }, [searchTerm, characters]);
+
+  const handleSearch = term => {
+    setSearchTerm(term);
+  };
 
   const renderGridItem = ({item}) => (
     <TouchableOpacity
@@ -46,8 +62,14 @@ const CharacterList = ({handleCharacterPress}) => {
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Rick and Morty Characters</Text>
+      <TextInput
+        style={styles.searchInput}
+        placeholder="Search by name"
+        value={searchTerm}
+        onChangeText={handleSearch}
+      />
       <FlatList
-        data={characters}
+        data={filteredCharacters}
         keyExtractor={item => item.id.toString()}
         contentContainerStyle={styles.cardContainer}
         numColumns={2}
@@ -68,6 +90,13 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 20,
     textAlign: 'center',
+    color: '#FFF',
+  },
+  searchInput: {
+    backgroundColor: '#3B3B3D',
+    borderRadius: 5,
+    padding: 10,
+    marginBottom: 10,
     color: '#FFF',
   },
   cardContainer: {

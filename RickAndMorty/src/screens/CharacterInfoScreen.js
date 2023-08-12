@@ -7,6 +7,10 @@ const CharacterInfoScreen = ({route}) => {
 
   const {character} = route.params;
 
+  const handleNavigateToEpisode = () => {
+    navigation.navigate('EpisodeDetailScreen', {episode: character.episode[0]});
+  };
+
   return (
     <View style={styles.container}>
       <Image source={{uri: character.image}} style={styles.characterImage} />
@@ -21,6 +25,10 @@ const CharacterInfoScreen = ({route}) => {
       <Button
         title="Back"
         onPress={() => navigation.goBack()} // Navigate back
+      />
+      <Button
+        title="View Episodes"
+        onPress={handleNavigateToEpisode} // Navigate to EpisodeDetailScreen
       />
     </View>
   );
