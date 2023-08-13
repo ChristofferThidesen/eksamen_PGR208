@@ -23,16 +23,8 @@ const HomeScreen = ({navigation}) => {
     navigation.navigate('CharacterInfoScreen', {character});
   };
 
-  const handleSearch = searchTerm => {
-    const filtered = characters.filter(character =>
-      character.name.toLowerCase().includes(searchTerm.toLowerCase()),
-    );
-    setFilteredCharacters(filtered);
-  };
-
   return (
     <View style={styles.container}>
-
       <CharacterList
         characters={filteredCharacters}
         handleCharacterPress={handleCharacterPress}

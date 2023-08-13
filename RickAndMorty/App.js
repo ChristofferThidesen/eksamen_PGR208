@@ -4,7 +4,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import HomeScreen from './src/screens/HomeScreen';
 import SplashScreen from './src/components/SplashScreen';
 import CharacterInfoScreen from './src/screens/CharacterInfoScreen';
-import EpisodeList from './src/components/EpisodeList';
+import EpisodesListScreen from './src/screens/EpisodesListScreen'; // Import the new screen
 import EpisodeDetailScreen from './src/screens/EpisodeDetailScreen';
 
 const Stack = createStackNavigator();
@@ -23,7 +23,10 @@ const App = () => {
           name="CharacterInfoScreen"
           component={CharacterInfoScreen}
         />
-        <Stack.Screen name="EpisodeList" component={EpisodeList} />
+        <Stack.Screen
+          name="EpisodesListScreen"
+          component={EpisodesListScreen}
+        />
         <Stack.Screen
           name="EpisodeDetailScreen"
           component={EpisodeDetailScreen}

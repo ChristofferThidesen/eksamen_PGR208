@@ -8,9 +8,8 @@ const EpisodeDetailScreen = ({route}) => {
     <View style={styles.container}>
       <Text style={styles.header}>Episode Details</Text>
       <Text style={styles.title}>Episode {episode.episode}</Text>
+      <Text style={styles.summary}>Episode Name: {episode.name}</Text>
       <Text style={styles.airDate}>Air Date: {episode.air_date}</Text>
-      <Text style={styles.summary}>{episode.name}</Text>
-      {/* Add other episode details here */}
     </View>
   );
 };

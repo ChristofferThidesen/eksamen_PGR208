@@ -30,7 +30,6 @@ const CharacterList = ({handleCharacterPress}) => {
   }, []);
 
   useEffect(() => {
-    // Filter characters based on search term
     const filtered = characters.filter(character =>
       character.name.toLowerCase().includes(searchTerm.toLowerCase()),
     );

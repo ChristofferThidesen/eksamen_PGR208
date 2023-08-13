@@ -1,22 +1,26 @@
 import React, {useState, useEffect} from 'react';
 import {View, Text, FlatList, TouchableOpacity, StyleSheet} from 'react-native';
 import axios from 'axios';
-import {useNavigation} from '@react-navigation/native';
 
-const EpisodeList = () => {
-  const navigation = useNavigation();
-  const [episodes, setEpisodes] = useState([]);
+const EpisodesListScreen = ({route, navigation}) => {
+  const {episodes} = route.params;
+  const [characterEpisodes, setCharacterEpisodes] = useState([]);
 
   useEffect(() => {
-    axios
-      .get('https://rickandmortyapi.com/api/episode')
-      .then(response => {
-        setEpisodes(response.data.results);
-      })
-      .catch(error => {
-        console.error('Error fetching episodes', error);
-      });
-  }, []);
+    const fetchCharacterEpisodes = async () => {
+      if (episodes && episodes.length > 0) {
+        const episodeData = await Promise.all(
+          episodes.map(episodeUrl =>
+            axios.get(episodeUrl).then(response => response.data),
+          ),
+        );
+
+        setCharacterEpisodes(episodeData);
+      }
+    };
+
+    fetchCharacterEpisodes();
+  }, [episodes]);
 
   const handleEpisodePress = episode => {
     navigation.navigate('EpisodeDetailScreen', {episode});
@@ -26,18 +30,16 @@ const EpisodeList = () => {
     <TouchableOpacity
       style={styles.episodeItem}
       onPress={() => handleEpisodePress(item)}>
-      <Text style={styles.episodeTitle}>Episode {item.episode}</Text>
+      <Text style={styles.episodeTitle}>{item.name}</Text>
       <Text style={styles.episodeAirDate}>Air Date: {item.air_date}</Text>
-      <Text style={styles.episodeName}>{item.name}</Text>{' '}
-      {/* Display episode name */}
     </TouchableOpacity>
   );
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Rick and Morty Episodes</Text>
+      <Text style={styles.header}>Episodes List</Text>
       <FlatList
-        data={episodes}
+        data={characterEpisodes}
         keyExtractor={item => item.id.toString()}
         renderItem={renderEpisodeItem}
       />
@@ -74,4 +76,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default EpisodeList;
+export default EpisodesListScreen;

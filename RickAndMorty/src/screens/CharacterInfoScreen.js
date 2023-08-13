@@ -1,14 +1,24 @@
 import React from 'react';
-import {View, Text, StyleSheet, Image, Button} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  Button,
+  TouchableOpacity,
+} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
 const CharacterInfoScreen = ({route}) => {
-  const navigation = useNavigation(); // Get navigation object
-
+  const navigation = useNavigation();
   const {character} = route.params;
 
-  const handleNavigateToEpisode = () => {
-    navigation.navigate('EpisodeDetailScreen', {episode: character.episode[0]});
+  const handleNavigateToEpisodesList = () => {
+    if (character.episode && character.episode.length > 0) {
+      navigation.navigate('EpisodesListScreen', {episodes: character.episode});
+    } else {
+      console.error('No episodes found for this character.');
+    }
   };
 
   return (
@@ -22,14 +32,12 @@ const CharacterInfoScreen = ({route}) => {
         <Text>Location: {character.location.name}</Text>
         <Text>Origin: {character.origin.name}</Text>
       </View>
-      <Button
-        title="Back"
-        onPress={() => navigation.goBack()} // Navigate back
-      />
-      <Button
-        title="View Episodes"
-        onPress={handleNavigateToEpisode} // Navigate to EpisodeDetailScreen
-      />
+      <TouchableOpacity
+        style={styles.button}
+        onPress={handleNavigateToEpisodesList}>
+        <Text style={styles.buttonText}>View Episodes</Text>
+      </TouchableOpacity>
+      <Button title="Back" onPress={() => navigation.goBack()} />
     </View>
   );
 };
@@ -57,6 +65,17 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#FFF',
     marginBottom: 10,
+  },
+  button: {
+    backgroundColor: '#007BFF',
+    borderRadius: 5,
+    padding: 10,
+    alignItems: 'center',
+    marginTop: 10,
+  },
+  buttonText: {
+    color: '#FFF',
+    fontWeight: 'bold',
   },
 });
 
