@@ -1,15 +1,34 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
+import db from '../../database/database';
 
 const EpisodeDetailScreen = ({route}) => {
   const {episode} = route.params;
+  const [episodeDetails, setEpisodeDetails] = useState(null);
+
+  useEffect(() => {
+    const fetchEpisodeDetails = async () => {
+      const details = await db.getEpisodeDetails(episode.id);
+      setEpisodeDetails(details);
+    };
+
+    fetchEpisodeDetails();
+  }, [episode.id]);
 
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Episode Details</Text>
-      <Text style={styles.title}>Episode {episode.episode}</Text>
-      <Text style={styles.summary}>Episode Name: {episode.name}</Text>
-      <Text style={styles.airDate}>Air Date: {episode.air_date}</Text>
+      {episodeDetails && (
+        <>
+          <Text style={styles.title}>Episode {episode.episode}</Text>
+          <Text style={styles.summary}>
+            Episode Name: {episodeDetails.name}
+          </Text>
+          <Text style={styles.airDate}>
+            Air Date: {episodeDetails.air_date}
+          </Text>
+        </>
+      )}
     </View>
   );
 };

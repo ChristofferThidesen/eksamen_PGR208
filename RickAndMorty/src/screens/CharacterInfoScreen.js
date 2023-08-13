@@ -8,14 +8,16 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+import db from '../../database/database'; 
 
 const CharacterInfoScreen = ({route}) => {
   const navigation = useNavigation();
   const {character} = route.params;
 
-  const handleNavigateToEpisodesList = () => {
+  const handleNavigateToEpisodesList = async () => {
     if (character.episode && character.episode.length > 0) {
-      navigation.navigate('EpisodesListScreen', {episodes: character.episode});
+      const characterEpisodes = await db.getEpisodesByCharacter(character.id);
+      navigation.navigate('EpisodesListScreen', {episodes: characterEpisodes});
     } else {
       console.error('No episodes found for this character.');
     }

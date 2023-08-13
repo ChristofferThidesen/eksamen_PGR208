@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {View, Text, FlatList, TouchableOpacity, StyleSheet} from 'react-native';
-import axios from 'axios';
+import db from '../../database/database';
 
 const EpisodesListScreen = ({route, navigation}) => {
   const {episodes} = route.params;
@@ -10,9 +10,18 @@ const EpisodesListScreen = ({route, navigation}) => {
     const fetchCharacterEpisodes = async () => {
       if (episodes && episodes.length > 0) {
         const episodeData = await Promise.all(
-          episodes.map(episodeUrl =>
-            axios.get(episodeUrl).then(response => response.data),
-          ),
+          episodes.map(async episodeUrl => {
+            const response = await axios.get(episodeUrl);
+            const episode = response.data;
+
+            await db.insertOrUpdateEpisode({
+              id: episode.id,
+              name: episode.name,
+              airDate: episode.air_date,
+            });
+
+            return episode;
+          }),
         );
 
         setCharacterEpisodes(episodeData);
